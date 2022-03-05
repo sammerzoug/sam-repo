@@ -1,4 +1,15 @@
-git branch -m master <BRANCH>
-git fetch origin
-git branch -u origin/<BRANCH> <BRANCH>
-git remote set-head origin -a
+
+1-  Init a local repository
+2-  Define the origin to the remote repository
+3-  Add the file to the index
+4-  Commit the files
+5-  Push the files from the local repository to the remote
+
+git init
+git remote add origin https://github.com/<yourLogin>/<yourRepository>.git
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+
+######de-initialize a repository
+rm -rf .git

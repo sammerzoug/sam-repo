@@ -1,0 +1,47 @@
+ip sla 10
+
+icmp-echo 10.0.0.2
+
+timeout 500
+
+frequency 3
+
+ip sla schedule 10 life forever start-time now
+
+track 10 rtr 10 reachability
+
+delay down 5 up 10
+
+event manager applet RAMDANE
+
+event track 10 state down
+
+action 1 cli command "enable"
+
+action 2 cli command "conf t"
+
+action 3 cli command "inte fa 0/1"
+
+action 4 cli command "shut"
+
+action 5 cli command "end"
+
+event manager applet RAMDANEU
+
+event track 10 state up
+
+action 1 cli command "enable"
+
+action 2 cli command "conf t"
+
+action 3 cli command "inte fa 0/1"
+
+action 4 cli command "no shut"
+
+action 5 cli command "end"
+
+if some have a better post it .
+
+ramdane
+
+regards

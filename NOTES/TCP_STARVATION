@@ -1,0 +1,22 @@
+TCP being a reliable protocol, implements some congestion control mechanisms. Slow Start is one of these.
+
+ 
+
+When a TCP senders start transmitting data, it starts with a small (congestion) window size. 
+It does so because it is yet to know if the receiving end will be able to successfully receive the data being sent 
+(sender gets to know when acknowledgements are received).
+
+When the sender receives an acknowledgement (ACK) for the data  sent,  it increases the value (size) of the (Congestion) Window. 
+It will do so with each acknowledgement (ACK) received.
+
+This transmission rate (from the sender) will be increased until a loss is detected, say it didn't receive an ACK from the receiver. 
+When this happens, TCP (on the sender) assumes that there is congestion on the network (that is why the data was not delivered or ACKed). 
+It responds by backing-off; reducing the data it sends on the network. TCP does so because it is reliable and connection oriented.
+
+UDP on the other hand, is connectionless, unreliable and does not implement any of such flow or congestion control mechanisms. 
+It just sends data using best effort. UDP does not have any idea there is congestion in the network, so it has not means of 
+backing-off or reducing data being sent.
+
+So now imagine have both TCP and UDP flows on the same network with the network experiencing high bandwidth congestion.  
+Where as TCP will back-off, UDP will just keep sending traffic and it won't back off. 
+The outcome is that UDP flows will dominate, and TCP flows will starve.

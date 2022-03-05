@@ -1,0 +1,13 @@
+event manager applet FA0/0-DOWN
+
+event track 1 state down
+
+action 1 cli command enable
+
+action 2 cli command "conf t"
+
+action 3 cli command "int fa0/1"
+
+action 4 cli command shut
+
+action 5 cli command exit

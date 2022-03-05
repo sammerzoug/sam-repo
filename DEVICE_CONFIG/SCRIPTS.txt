@@ -1,0 +1,1329 @@
+vmrc://root@192.168.0.64/?moid=19    ######################WINDOWS MACHINE
+
+www.python.org
+   Documentation 
+   Pepindex
+
+tar -xf filename.tar (to extract the file on linux)
+
+Create and use a virtual environment for python existing in folder p3.6
+virtualenv -p python3.6 P3.6
+virtualenv P3.6
+source P3.6/bin/activate
+
+or virtualenv -p python2.7 P2.7 (To create a folder in python2.7 named P2.7, which will be used as a virtual environment)
+pi install readline (to help read the line and avoid error with Python2.7
+--------------------------------------------------------------------------
+BASIC PARAMIKO SCRIPT:
+----------------------
+
+import paramiko
+import time
+from getpass import getpass
+
+ip = 'hostname'
+username = 'admin'
+password = gepass()
+
+
+SESSION = paramiko.SSHClient()
+SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+SESSION.connect(ip,port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+DEVICE_ACCESS = SESSION.invoke_shell()
+DEVICE_ACCESS.send(b'config t\n')
+
+for N in range (1,10):
+    DEVICE_ACCESS.send('command' +str(N) + '\n')
+
+time.sleep(3)
+DEVICE_ACCESS.send(b'do term length 0\n')
+DEVICE_ACCESS.send(b'do show ip int brief\n')
+time.sleep(3)
+output = DEVICE_ACCESS.recv(65000)
+print (output.decode('ascii'))
+
+SESSION.close
+
+
+
+-------------Connecting to multiple devices to execute a code in PARAMIKO---------------------
+import paramiko
+import time
+from getpass import getpass
+
+###ip = 'hostname'
+username = 'cisco'
+password = gepass()
+
+###DEVICES = ['1,11']
+for RTR in (1,11):
+    ip = '11.0.0.' +str(RTR)
+    print ('\n### Connecting to the device ' + ip + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(ip,port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    DEVICE_ACCESS.send(b'config t\n')
+
+    for N in (20,22):
+        DEVICE_ACCESS.send('int loopback ' +str(N) + '\n')
+        DEVICE_ACCESS.send('ip address 1.1.1.' +str(N) + ' 255.255.255.255\n')
+        time.sleep(3)
+        DEVICE_ACCESS.send(b'do term length 0\n')
+        DEVICE_ACCESS.send(b'do show ip int brief\n')
+        time.sleep(3)
+        output = DEVICE_ACCESS.recv(65000)
+        print (output.decode('ascii'))
+    
+    SESSION.close
+--USE OF A LIST----  EX: DEVICE_LIST =['10.10.10.' + STR(n) for n in range(10,15)]
+-------------------------for a in DEVICE_LIST:
+-------------------------print(a)
+
+-------------------------DEVICE_LIST =['10.10.10.10','10.10.10.12']
+                         DEVICE_LIST.append('R1') ------------------------------- this method will add 'R1' to the DEVICE_LIST array
+-------------------------print(DEVICE_LIST[0]) --------------------------this statement will print the first entry within the array
+-------------------------type() ----- gives you the type, which in the case of DEVICE_LIST is "class 'list'"
+                         dir(DEVICE_LIST) ----- provides all the methods and attributes that can be utilize to append, insert, etc.
+                         help and topics (LISTS, SQUENCES) (provides details on how you can use methods)
+import paramiko
+import time
+from getpass import getpass
+
+###ip = 'hostname'
+username = 'cisco'
+password = gepass()
+
+DEVICES = ['1,11']
+for RTR in DEVICES:
+    ip = '11.0.0.' +str(RTR)
+    print ('\n### Connecting to the device ' + ip + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(ip,port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    DEVICE_ACCESS.send(b'config t\n')
+
+    for N in (20,22):
+        DEVICE_ACCESS.send('int loopback ' +str(N) + '\n')
+        DEVICE_ACCESS.send('ip address 1.1.1.' +str(N) + ' 255.255.255.255\n')
+        time.sleep(3)
+        DEVICE_ACCESS.send(b'do term length 0\n')
+        DEVICE_ACCESS.send(b'do show ip int brief\n')
+        time.sleep(3)
+        output = DEVICE_ACCESS.recv(65000)
+        print (output.decode('ascii'))
+    
+    SESSION.close
+
+
+----------------------------
+import paramiko
+import time
+from getpass import getpass
+
+###ip = 'hostname'
+username = 'cisco'
+password = getpass.getpass()
+
+#####example of use 'for' loops in list######################
+DEVICE_LIST =['11.0.0.' + str(n) for n in range(1,10)]
+for RTR in DEVICE_LIST:
+    print ('\n### Connecting to the device ' + RTR + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(RTR,port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    DEVICE_ACCESS.send(b'config t\n')
+
+    for N in (20,22):
+        DEVICE_ACCESS.send('int loopback ' +str(N) + '\n')
+        DEVICE_ACCESS.send('ip address 1.1.1.' +str(N) + ' 255.255.255.255\n')
+        time.sleep(3)
+        DEVICE_ACCESS.send(b'do term length 0\n')
+        DEVICE_ACCESS.send(b'do show ip int brief\n')
+        time.sleep(3)
+        output = DEVICE_ACCESS.recv(65000)
+        print (output.decode('ascii'))
+    
+    SESSION.close
+
+----------------------------------------------CONFIGURE DEVICES USING A FILE--------------------------------------
+CREATE FILE FIRST: DEVICE_LIST.txt  ---- with open('filename.txt') as LIST:
+                                               For RTR in LIST:
+                                                   print(RTR)
+or LIST = open('filename.txt')
+   for RTR in LIST:
+       print(RTR)
+
+
+----------------------------------------------------------------------help()------keywords------
+import paramiko
+import time
+from getpass import getpass
+
+###ip = 'hostname'
+username = 'cisco'
+password = gepass()
+
+#####example of use 'for' loops in list######################
+DEVICE_LIST = open ('filename.txt')
+for RTR in DEVICE_LIST:
+    print ('\n### Connecting to the device ' + RTR.strip() + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(RTR,port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    DEVICE_ACCESS.send(b'config t\n')
+
+    for N in (20,22):
+        DEVICE_ACCESS.send('int loopback ' +str(N) + '\n')
+        DEVICE_ACCESS.send('ip address 1.1.1.' +str(N) + ' 255.255.255.255\n')
+        time.sleep(3)
+        DEVICE_ACCESS.send(b'do term length 0\n')
+        DEVICE_ACCESS.send(b'do show ip int brief\n')
+        time.sleep(3)
+        output = DEVICE_ACCESS.recv(65000)
+        print (output.decode('ascii'))
+    
+    SESSION.close
+
+--------replace entire configuration with a filename.txt----
+DEVICE_LIST = open ('filename.txt')
+for RTR in DEVICE_LIST:
+    print ('\n### Connecting to the device ' + RTR.strip() + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(RTR,port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    COMMANDS = open ('filename.txt')
+    for LINES in COMMANDS:
+        time.sleep(3)
+        DEVICE_ACCESS.send(LINES) ------ OR DEVICE_ACCESS.send(str(LINES))
+     
+    time.sleep(3)
+    output = DEVICE_ACCESS.recv(65000)
+    print (output.decode('ascii'))
+    
+    SESSION.close
+
+
+------------------------------------------------------------------------------------------------------------------
+-----------------the strip() function removes empty space before and after-----
+
+DEVICE_LIST = open ('filename.txt')
+for RTR in DEVICE_LIST:
+###or RTR = RTR.strip()#############
+    print ('\n### Connecting to the device ' + RTR.strip() + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(RTR.strip(),port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    COMMANDS = open ('filename.txt')
+    for LINES in COMMANDS:
+        time.sleep(3)
+        DEVICE_ACCESS.send(LINES) ------ OR DEVICE_ACCESS.send(str(LINES))
+     
+    time.sleep(3)
+    output = DEVICE_ACCESS.recv(65000)
+    print (output.decode('ascii'))
+    
+    SESSION.close
+-----------------------------------------------------------------------------------------------------------------
+-------------------------------HOW TO BACK UP CONFIGS------------------------------------------------------------
+import paramiko
+import time
+from getpass import getpass
+import datetime
+
+#######TNOW is time now###
+#####import datetime()
+####TNOW = datetime.datetime.now()
+####TNOW
+####print (str(TNOW))
+####TNOW = datetime.datetime.now().replace(microsecond=0)
+####
+TNOW = datetime.datetime.now().replace(microsecond=0)
+username = 'cisco'
+password = 'cisco'
+
+DEVICE_LIST = open ('list.txt')
+for RTR in DEVICE_LIST:
+    print ('\n### Connecting to the device ' + RTR.strip() + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(RTR.strip(),port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    COMMANDS = open ('ConfigurationFile.txt')
+    for lines in COMMANDS:
+        time.sleep(3)
+        DEVICE_ACCESS.send(lines)
+      
+    time.sleep(10)
+    output = DEVICE_ACCESS.recv(65000)
+#    print (output.decode('ascii'))
+    SAVE_FILE = open('ROUTER_' + RTR + str(TNOW) , 'w')
+    SAVE_FILE.write(output.decode('ascii'))
+    SAVE_FILE.close    
+        
+    SESSION.close
+
+
+---------------HOW TO SAVE TO ----------------------------------TFTP AND SCP----SERVER----------------------------------------pwd (Checks your current PATH)-----
+----------------------------------sudo ufw logging low---------###ufw is creating logs.
+---------------------------------------tail -f /var/log/ufw.log####to create a terminal to observe logs
+-----------------sudo ufw allow out to ip_address port 22--------------------------------------
+---scp_pass = getpass( prompt = 'Enter SCP server Password :')
+----------------
+import paramiko
+import time
+from getpass import getpass
+import datetime
+
+
+#####import datetime()
+####TNOW = datetime.datetime.now() #######TNOW is time now###
+####TNOW
+####print (str(TNOW))
+####TNOW = datetime.datetime.now().replace(microsecond=0)
+####
+
+TNOW = datetime.datetime.now().replace(microsecond=0)
+TFORMAT = '{:%d-%m-%Y %H:%M:%S}'.format(TNOW)
+
+username = 'cisco'
+password = 'cisco'
+scp_pass = getpass( prompt = 'Enter SCP server Password :'
+
+DEVICE_LIST = open ('list.txt')
+for RTR in DEVICE_LIST:
+    print ('\n### Connecting to the device ' + RTR.strip() + '####\n' )
+    SESSION = paramiko.SSHClient()
+    SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    SESSION.connect(RTR.strip(),port=22,
+                username=username,
+                password=password,
+                look_for_keys=False,
+                allow_agent=False)
+
+    DEVICE_ACCESS = SESSION.invoke_shell()
+    COMMANDS = open ('ConfigurationFile.txt')
+    DEVICE_ACCESS.send('copy nvram:filename.bin scp://username@ip_address/data/path/filename.bin_' + RTR + '_' +TFORMAT + '\n\n\n\n') ##This will secure copy the file from network device to scp server
+    time.sleep(1)
+    DEVICE_ACCESS.send(scp_pass + '\n')
+    time.sleep(5)
+    print ('Backup completed for the device ' + RTR +'\n')
+         
+    SESSION.close
+
+
+######name = 'Dev'
+######print( 'Hello, %S !' % name)
+#####name = 'Hamilton'
+######car = 44
+######print("$s's car number is %i" % (name,car))
+######
+######fer =('Ferrari','Vettel', 5)
+######mer =('Mercedes', 'Hamilton',44)
+######output = "%s driver %s's car number is %i "
+############print( output % fer)
+
+############import datetime
+############print(datetime.datetime.now())
+############print(datetime.datetime.now().replace(microsecond=0))
+###############TNOW =print(datetime.datetime.now())
+###############TNOW.minute
+###############TFORMAT = '{:%Y-%m-%d %H:%S}'.format(TNOW)
+###############print(TFORMAT)
+
+############################################################
+TNOW =print(datetime.datetime.now())	     ###############
+TFORMAT = '{:%d-%m-%Y %H:%M:%S}'.format(TNOW)###############
+print(TFORMAT)				     ###############
+############################################################
+-------------------------------------------------------------NETMIKO-----------------------------https://github.com/networktocode/ntc-templates/blob/master/templates/index---------------------------------------------------------------------------
+----------------------https://pypi.org/project/netmiko/--------------------
+--------------------------------https://github.com/ktbyers/netmiko/blob/master/netmiko/ssh_dispatcher.py-----
+-------------------------------------------------RTR = {'ip' : '10.10.10.10'}--- type(RTR)---DICT-----------------------------------------------
+----------------TO ADD VALUES TO THE DICT---------RTR['device_type'} = 'router'--------------------------------------------------------------------------------------------------------------------
+
+from netmiko import ConnectHandler
+
+VIRL_ROUTER = {
+    'password': 'password',
+    'device_type': 'cisco_ios',
+    'host':   '11.10.10.10',
+    'username': 'test',
+#    'port' : 8022,          # optional, defaults to 22
+#    'secret': 'secret',     # optional, defaults to ''
+}
+
+net_connect = ConnectHandler(**VIRL_ROUTER)
+
+output = net_connect.send_command('show ip int brief')
+print(output)
+
+config_commands = [ 'logging buffered 20000',
+                    'logging buffered 20010',
+                    'no logging console' ]
+output = net_connect.send_config_set(config_commands) ####THIS COMMAND SEND A DICT COMMAND
+print(output)
+-----------------------------------------------------------------------
+import paramiko
+import datetime
+from netmiko import ConnectHandler
+import getpass from getpass  #######THIS WILL GET PASSWORD
+
+TNOW = datetime.datetime.now().replace(microsecond=0)
+
+hostname = input ('ENTER THE HOSTNAME: ')
+username = input ('ENTER YOUR USERNAME: ')
+password = getpass()
+
+VIRL_DEVICES = {
+    'password': password,
+    'device_type': 'cisco_ios',
+    'host':   hostname,
+    'username': username,
+#    'port' : 8022,          # optional, defaults to 22
+#    'secret': 'secret',     # optional, defaults to ''
+}
+
+net_connect = ConnectHandler(**VIRL_DEVICES)
+
+user_input = input('Enter show Command: ')
+output = net_connect.send_command(user_input)
+print(output)
+
+#file_config = open ('VIRL_ROUTER' + str(TNOW), 'w')
+#file_config.write(output)
+#file_config.close
+
+-------------------------------------DICTIONNARY WITH NETMIKO-----------------------------
+from netmiko import ConnectHandler
+import paramiko
+import datetime
+import time
+
+VIRL_ROUTER_OUTSIDE = {
+    'device_type': 'cisco_ios',
+    'host':   '11.0.0.12',
+    'username': 'cisco',
+    'password': 'cisco',
+}
+
+VIRL_FIREWALL = {
+    'device_type': 'cisco_ios',
+    'host':   '11.0.0.9',
+    'username': 'cisco',
+    'password': 'cisco',
+}
+
+VIRL_ROUTER_INSIDE = {
+    'device_type': 'cisco_ios',
+    'host':   '11.0.0.1',
+    'username': 'cisco',
+    'password': 'cisco',
+}
+
+VIRL_SWITCH_OUTSIDE = {
+    'device_type': 'cisco_ios',
+    'host':   '100.100.100.1',
+    'username': 'cisco',
+    'password': 'cisco',
+}
+VIRL_SWITCH_INSIDE = {
+    'device_type': 'cisco_ios',
+    'host':   '200.200.200.1',
+    'username': 'cisco',
+    'password': 'cisco',
+}
+
+
+
+DEVICE_LIST = [VIRL_ROUTER_OUTSIDE, VIRL_FIREWALL, VIRL_ROUTER_INSIDE, VIRL_SWITCH_OUTSIDE, VIRL_SWITCH_INSIDE]
+for device in DEVICE_LIST:
+    print('###########' + 'Connecting to the device ' + device['device_type'] + '##########')    
+    net_connect = ConnectHandler(**device)
+    user_input = ('ENTER YOUR SHOW COMMAND: ')
+    time.sleep(3)
+    output = net_connect.send_command(user_input)
+    time.sleep(10)
+    print(output)
+    print('\n')
+
+
+--------------------------------------------------------------------------------------
+---------------------------------------configure device using netmiko === FILE--------------
+
+from netmiko import ConnectHandler
+from getpass import getpass  #######THIS WILL GET PASSWORD
+import time
+#TNOW = datetime.datetime.now().replace(microsecond=0)
+
+
+with open ('router_list') as list:
+    for IP in list:
+
+#    hostname = input ('ENTER THE HOSTNAME: ')
+#    username = input ('ENTER YOUR USERNAME: ')
+#    password = getpass()
+
+        VIRL_DEVICES = {
+           'device_type': 'cisco_ios',
+           'host':   IP,
+           'username': 'cisco',
+           'password': 'cisco',
+        }
+        print ('Connecting to the device ' + IP)
+        net_connect = ConnectHandler(**VIRL_DEVICES)
+        time.sleep(2)
+        with open ('config', 'r') as CONFIG_LINES:
+            CONFIG = CONFIG_LINES.readlines()
+        output = net_connect.send_config_set(CONFIG)
+        print(output)
+
+#file_config = open ('VIRL_ROUTER' + str(TNOW), 'w')
+#file_config.write(output)
+#file_config.close
+
+----------------------------------------------CONFIG FROM A FILE-----------------------------------
+
+from netmiko import Netmiko
+from getpass import getpass
+
+rtr = {
+    "host": "11.0.0.1",
+    "username": "cisco",
+    "password": 'cisco',
+    "device_type": "cisco_ios",
+}
+
+cfg_file = "config"
+net_connect = Netmiko(**rtr)
+
+print()
+print(net_connect.find_prompt())
+output = net_connect.send_config_from_file(cfg_file)
+print(output)
+print()
+
+net_connect.save_config()
+net_connect.disconnect()
+
+
+-------------------------------------Handle device not reachable exceptions in Netmiko--------------------------------------------------------------------------------
+##  y = 'N' + 1 #### string and 1 is an integer; this will lead to an error.
+##
+##
+##
+##
+##
+##
+##
+
+from netmiko import Netmiko
+from getpass import getpass
+from netmiko.ssh.exception import NetMikoTimeoutException
+
+rtr = {
+    "host": "11.0.0.1",
+    "username": "cisco",
+    "password": 'cisco',
+    "device_type": "cisco_ios",
+}
+
+cfg_file = "config"
+
+try:
+    net_connect = Netmiko(**rtr)
+
+except NetMikoTimeoutException: 
+    print()
+    print()
+    print('Device not reachable', net['host'])
+    continue
+
+print(net_connect.find_prompt())
+output = net_connect.send_config_from_file(cfg_file)
+print(output)
+print()
+
+net_connect.save_config()
+net_connect.disconnect()
+ 
+---------------------------------------------------------------------------------------------------------------------------------------
+try: 
+    y = 'N' + 1
+    print('output is ' + y)
+
+except TypeError:
+    print('Not a string.')
+
+except NameError:
+    print ('variable is not defined.')
+
+----------------------------------------------------------------------------------------------------------------------------
+
+from netmiko import ConnectHandler
+From getpass import getpass
+from netmiko.ssh_exception import NetMikoTimeoutException
+from netmiko.ssh_exception import NetMikoAuthenticationException
+from paramiko.ssh_exception import SSHException
+
+IP_LIST = open('list')
+for IP in IP_LIST:
+   RTR = {
+      "host": "11.0.0.1",
+      "username": "cisco",
+      "password": 'cisco',
+      "device_type": "cisco_ios",
+   }
+   print ('\n####Connecting to the device ' + IP)
+   try:
+       net_connect = ConnectHandler(**RTR)
+
+   except NetMikoTimeoutException:
+       print('Device not reachable' )
+       continue
+
+   except NetMikoAuthenticationException:
+       print('Authentication Failure' )
+       continue
+
+   except SSHException:
+       print('Make sure SSH is enabled.' )
+       continue
+
+    output = net_connect.send_config_from_file(config_file='cfg_file')
+    print(output)
+
+    print('\n Saving the configuration \n')
+    output = net_connect.save_config()
+    print(output)
+
+    output = net_connect.send_command('show ip int brief')
+    print(output)
+              
+-------------------------------------------------------------------------------------------------------------------       
+  
+
+from netmiko import ConnectHandler
+From getpass import getpass
+from netmiko.ssh_exception import NetMikoTimeoutException
+from netmiko.ssh_exception import NetMikoAuthenticationException
+from paramiko.ssh_exception import SSHException
+import datetime
+import time
+
+TNOW = datetime.datetime.now().replace(microsecond=0)
+
+IP_LIST = open('list')
+for IP in IP_LIST:
+   RTR = {
+      "device_type": "cisco_ios",
+      "host": IP,
+      "username": "cisco",
+      "password": 'cisco',      
+   }
+
+   print ('\n####Connecting to the device ' + IP)
+   try:
+       net_connect = ConnectHandler(**RTR)
+
+   except NetMikoTimeoutException:
+       print('Device not reachable' )
+       continue
+
+   except NetMikoAuthenticationException:
+       print('Authentication Failure' )
+       continue
+
+   except SSHException:
+       print('Make sure SSH is enabled.' )
+       continue
+
+    print('\n Initiating config backup \n')
+    output = net_connect.send_command('show run')
+    print(output)
+    SAVE_FILE = open('ROUTER_' + IP + str(TNOW), 'w')
+    SAVE_FILE.write(output)
+    SAVE_FILE.close
+    print('\n Initiating config backup \n')
+
+    
+
+#    output = net_connect.send_command('show ip int brief')
+#    print(output)
+              
+-----------------------------------------------SSH KEY PAIR----------------------------------------------------------------------------
+##NEGOTIATE CYPHER
+#ssh -Q mac /finds your different MAC
+#ssh-Q cipher
+#ssh -m hmac-sha2-512 -l cisco -A 11.0.0.1
+
+
+#ssh-keygen -b 2048 -t rsa
+#fold -b -w 70 key1.pub
+#ssh-keygen -f key1.pub -l  ###########TO SEE THE HASH AND VERIFY HASH#########
+#ssh -i key1 key1@11.0.0.1
+#username key1 priv 15
+#ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3qtRHK1SLwTPRZzn79bh3Ld6hC4A/Oe
+#IexpDEXLUWrFaWXwmdfEREo/4GvQCw2g/PaZWeDx8UlgfHpVW7oepO0egYzCNPya3C4Esx
+#V5DUXh/gbtPbwsbIdQehKYshsKlLDgcPxvrh6hhVM15GgVf9gt+TPtc2rw247oQ5nZmBPg
+#R5849Fx8kkdrOfeqmIe+INhx141+NajaS0CJXdHrhC2aXCbjbfh97m2m3PsR5LvxAiKwGG
+#y/z9Dj3Oi74zCbPwHhpgIiUBGaSEr10eFVDA72HdlUUac1ZC76riHdKK9UgHXu7ixhdISN
+#fO8Etb1L0CMVB0CgWyFNfu8qwQVmwv root@devops
+
+#######################ON ROUTER###########
+#ip ssh pubkey-chain
+#username key1
+#key-string
+#(PASTE THE KEY)
+#
+from netmiko import ConnectHandler
+from getpass import getpass
+from netmiko.ssh_exception import NetMikoTimeoutException
+from netmiko.ssh_exception import NetMikoAuthenticationException
+from paramiko.ssh_exception import SSHException
+import datetime
+import time
+
+TNOW = datetime.datetime.now().replace(microsecond=0)
+
+IP_LIST = open('list')
+for IP in IP_LIST:
+    RTR = {
+        'device_type': "cisco_ios",
+        'host': IP,
+        'username': 'key1',
+        'use_keys': True,
+        'key_file': '/SCRIPTS-DEVOPS/SSH_KEY_PAIR/key1',
+    }
+
+    print ('\n####Connecting to the device ' + IP)
+    try:
+        net_connect = ConnectHandler(**RTR)
+
+    except NetMikoTimeoutException:
+        print('Device not reachable')
+        continue
+
+    except NetMikoAuthenticationException:
+        print('Authentication Failure')
+        continue
+
+    except SSHException:
+        print('Make sure SSH is enabled.')
+        continue
+
+    print('\n Initiating config backup \n')
+    output = net_connect.send_command('show run')
+    print(output)
+    SAVE_FILE = open('ROUTER_' + IP + str(TNOW), 'w')
+    SAVE_FILE.write(output)
+    SAVE_FILE.close
+    print('\n Bakup Completed \n')
+
+
+---------------------------------BACK UP ---SCHEDULING BACKUP----------------------------------------------------------
+----------------------https://pypi.org/project/schedule/----------------------------------------------------------
+
+import schedule
+import time
+import datetime
+
+def MINUTE():
+    TNOW = datetime.datetime.now().replace(microsecond=0)
+    print( str(TNOW) + 'This print every minute.')
+
+def SECONDS():
+    TNOW = datetime.datetime.now().replace(microsecond=0)
+    print( str(TNOW) + 'This print every 5 seconds interval for 3 times.')
+
+schedule.every(1).minutes.do(MINUTE)
+schedule.every().minute.at(':05').do(SECONDS)
+schedule.every().minute.at(':10').do(SECONDS)
+schedule.every().minute.at(':15').do(SECONDS)
+
+#schedule.every().hour.do(job)
+#schedule.every().day.at("10:30").do(job)
+#schedule.every(5).to(10).minutes.do(job)
+#schedule.every().monday.do(job)
+#schedule.every().wednesday.at("13:15").do(job)
+#schedule.every().minute.at(":17").do(job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+---------------------------------------SCHEDULING PART(2)-------------------------------------------------------
+
+
+
+
+import paramiko
+from netmiko import ConnectHandler
+from netmiko.ssh_exception import NetMikoTimeoutException
+from netmiko.ssh_exception import NetMikoAuthenticationException
+from paramiko.ssh_exception import SSHException
+from getpass import getpass  #######THIS WILL GET PASSWORD
+import time
+import datetime
+
+TNOW = datetime.datetime.now().replace(microsecond=0)
+
+hostname = input ('ENTER THE HOSTNAME: ')
+#username = input ('ENTER YOUR USERNAME: ')
+#password = getpass()
+#secret = getpass('Enter your enable password: ')
+VIRL_DEVICES = {
+    'device_type': 'cisco_ios',
+    'host': hostname,
+    'username': 'cisco',
+    'password': 'cisco',
+#    'secret': secret,     # optional, defaults to ''
+    'port' : 22,          # optional, defaults to 22
+}
+
+print(' \n################CONNECTING TO DEVICE###########\n ')
+
+try:
+    net_connect = ConnectHandler(**VIRL_DEVICES)
+    net_connect.enable() #######THIS WILL ALLOW THE ENABLE PASSWORD TO BE PARSE
+
+except NetMikoTimeoutException:
+    print('\n############DEVICE IS UNREACHABLE###############\n')
+    print()
+    print()
+
+except NetMikoAuthenticationException:
+    print('\n##########AUTHENTICATION FAILURE###############\n')
+    print()
+    print()
+
+except SSHException:
+    print('\n#############MAKE SSH IS ENABLE ON THE REMOTE DEVICE###############\n')
+    print()
+    print()
+
+print('Do you want to request an output or set a config?')
+print()
+a = int(input('Enter 0 to request an output or 1 to configure the device: '))
+
+if a == 0:
+    user_input = input('Enter a request configuration command: ')
+    output = net_connect.send_command(user_input)
+    print(output)
+
+else:
+    if a == 1:
+        cfg_config = 'cfg_file'
+        net_connect.send_config_from_file(cfg_config)
+        user_input = input('Enter a request configuration command: ')
+        output = net_connect.send_command(user_input)
+        print(output)
+
+    else:
+        print('The scripts ends.')
+
+--------------------------------------------------------------------------------------------------------------
+192.168.0.1
+192.168.0.4
+192.168.100.1
+---------------------------------------------PROCESS STATE CODES-----ps -aux-------------------------------
+PROCESS STATE CODES
+       Here are the different values that the s, stat and state output
+       specifiers (header "STAT" or "S") will display to describe the state of
+       a process:
+
+               D    uninterruptible sleep (usually IO)
+               R    running or runnable (on run queue)
+               S    interruptible sleep (waiting for an event to complete)
+               T    stopped by job control signal
+               t    stopped by debugger during the tracing
+               W    paging (not valid since the 2.6.xx kernel)
+               X    dead (should never be seen)
+               Z    defunct ("zombie") process, terminated but not reaped by
+                    its parent
+
+       For BSD formats and when the stat keyword is used, additional
+       characters may be displayed:
+
+               <    high-priority (not nice to other users)
+               N    low-priority (nice to other users)
+               L    has pages locked into memory (for real-time and custom IO)
+               s    is a session leader
+               l    is multi-threaded (using CLONE_THREAD, like NPTL pthreads
+                    do)
+               +    is in the foreground process group
+
+****RSS is the Resident Set Size and is used to show how much memory is allocated to that process and is in RAM.
+****VSZ is the Virtual Memory Size. It includes all memory that the process can access, including memory that is swapped out, 
+memory that is allocated, but not used, and memory that is from shared libraries.
+
+--------------------------------------------------------------------------------------------------------------------------
+from netmiko import ConnectHandler
+from getpass import getpass
+from netmiko.ssh_exception import NetMikoTimeoutException
+from netmiko.ssh_exception import NetMikoAuthenticationException
+from paramiko.ssh_exception import SSHException
+import datetime
+import time
+import schedule
+
+
+    
+def BACKUP():
+    TNOW = datetime.datetime.now().replace(microsecond=0)
+    IP_LIST = open('router_list')
+    for IP in IP_LIST:
+        RTR = {
+           "device_type": "cisco_ios",
+           "host": IP,
+           "username": "cisco",
+           "password": 'cisco',      
+        }
+
+        print ('\n####Connecting to the device ' + IP)
+        try:
+            net_connect = ConnectHandler(**RTR)
+
+        except NetMikoTimeoutException:
+            print('Device not reachable' )
+            continue
+
+        except NetMikoAuthenticationException:
+            print('Authentication Failure' )
+            continue
+
+        except SSHException:
+            print('Make sure SSH is enabled.' )
+            continue
+
+         print('\n Initiating config backup \n')
+         output = net_connect.send_command('show run')
+         print(output)
+         SAVE_FILE = open('ROUTER_' + IP + str(TNOW), 'w')
+         SAVE_FILE.write(output)
+         SAVE_FILE.close
+         print('\n Initiating config backup \n')
+
+schedule.every().minute.at(':00').do(BACKUP)
+while True:
+   schedule.run_pending()
+   time.sleep(1)
+
+----------------------------------------------------------------------------------------------------------------------------------
+import paramiko
+import datetime
+from netmiko import ConnectHandler
+from getpass import getpass  #######THIS WILL GET PASSWORD
+
+TNOW = datetime.datetime.now().replace(microsecond=0)
+
+hostname = input ('ENTER THE HOSTNAME: ')
+#username = input ('ENTER YOUR USERNAME: ')
+#password = getpass()
+#secret = getpass('Enter your enable password: ')
+
+VIRL_DEVICES = {
+    'device_type': 'cisco_ios',
+    'host': hostname,
+    'username': 'sam',
+    'password': 'Nikita1980!',
+    'secret': 'Nikita1980!',     # optional, defaults to ''
+    'port' : 22,          # optional, defaults to 22
+}
+
+print ('\n####Connecting to the device ' + hostname.strip() + '###############\n')
+net_connect = ConnectHandler(**VIRL_DEVICES)
+net_connect.enable() #######THIS WILL ALLOW THE ENABLE PASSWORD TO BE PARSE
+
+while True:
+    print('Do you want to request an output or set a config?')
+    print()
+    a = int(input('Enter 0 to request an output or 1 to configure the device: '))
+    
+    if a == 0:
+        user_input = input('Enter a request configuration command: ')
+        output = net_connect.send_command(user_input)
+        print(output)
+
+    else:
+        if a == 1:
+            a = int(input('Enter 0 to Continue or 1 to complete configuration: '))
+            cfg_config = open('cfg_file', 'w')
+            while a == 0:
+                user_input = str(input('Enter a request configuration command: '))
+                output = user_input
+                cfg_config = open('cfg_file', 'a')
+                cfg_config.write(output + '\n')
+                print()
+                a = int(input('Enter 0 to Continue or 1 to complete configuration: '))
+                cfg_config.close
+
+            cfg_config = 'cfg_file'
+            net_connect.send_config_from_file(cfg_config)
+
+        else:
+            print('The scripts ends.')
+            break
+
+
+-------------------------------------BACKUP USING PARAMIKO--------------------------------------
+import paramiko
+import time
+from getpass import getpass
+import datetime
+
+def BACKUP():
+   TNOW = datetime.datetime.now().replace(microsecond=0)
+
+   username = input('Enter a username: ')
+   password = input('Enter a password')
+
+   DEVICE_LIST = open ('list.txt')
+   for RTR in DEVICE_LIST:
+      print ('\n### Initiating the backup of device ' + RTR.strip() + '#### at ' + str(TNOW) + '\n' )
+      SESSION = paramiko.SSHClient()
+      SESSION.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+      SESSION.connect(RTR.strip(),port=22,
+               username=username,
+               password=password,
+               look_for_keys=False,
+               allow_agent=False)
+
+      DEVICE_ACCESS = SESSION.invoke_shell()
+      DEVICE_ACCESS.send(b'terminal len 0\n')
+      DEVICE_ACCESS.send(b'show run\n') 
+
+#      COMMANDS = open ('ConfigurationFile.txt')
+#      for lines in COMMANDS:
+#         time.sleep(3)
+#         DEVICE_ACCESS.send(lines)
+      
+      time.sleep(5)
+
+      output = DEVICE_ACCESS.recv(65000)
+      print (output.decode('ascii'))
+      SAVE_FILE = open('ROUTER_' + RTR + str(TNOW) , 'w')
+      SAVE_FILE.write(output.decode('ascii'))
+      SAVE_FILE.close    
+        
+      SESSION.close
+
+schedule.every().minute.at(':00').do(BACKUP)
+while True:
+   schedule.run.pending()
+   time.sleep(1)
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+go https://github.com/networktocode/ntc-templates
+
+https://github.com/networktocode/ntc-templates.git
+
+git clone https://github.com/networktocode/ntc-templates.git
+
+
+export NET_TEXTFSM=/SCRIPTS-DEVOPS/Configuration_Backup/folder_netmiko/TXTFSM/ntc-templates/templates
+
+----------------------------------------USING TXTFSM---------PARSING-------------------------------------------------
+
+from netmiko import ConnectHandler
+from getpass import getpass
+from netmiko.ssh_exception import NetMikoTimeoutException
+from netmiko.ssh_exception import NetMikoAuthenticationException
+from paramiko.ssh_exception import SSHException
+from operator import itemgetter
+import datetime
+import time
+import schedule
+
+def BACKUP():
+    TNOW = datetime.datetime.now().replace(microsecond=0)
+
+    IP_LIST = open('router_list')
+    for IP in IP_LIST:
+        RTR = {
+            "device_type": "cisco_ios",
+            "host": IP,
+            "username": "cisco",
+            "password": 'cisco',
+        }
+
+        print ('\n####Connecting to the device ' + IP)
+        try:
+            net_connect = ConnectHandler(**RTR)
+
+        except NetMikoTimeoutException:
+            print('Device not reachable' )
+            continue
+
+        except NetMikoAuthenticationException:
+            print('Authentication Failure' )
+            continue
+
+        except SSHException:
+            print('Make sure SSH is enabled.' )
+            continue
+
+        show = net_connect.send_command('show ip int br | e unassigned',use_textfsm=True)
+
+
+#       l = len(show) 
+        name = show[2]['intf']
+        status = show[2]['status']
+        print('\n Interface ' + name + ' status is ' + status)
+
+        print(name)
+
+        getinf = itemgetter('intf')
+        getstatus = itemgetter('status')
+        getprotocol = itemgetter('proto')
+
+        x = getinf(name)
+        y = getstatus(name)
+        z = getprotocol(name)
+
+        print ('\n' + x + '\n' + 'status is  '+ y + '\n' + 'The protocol is ' + z)
+
+
+
+BACKUP()
+
+202 590 8668
+#########################################################
+ssh-keygen -f "/root/.ssh/known_hosts" -R "11.0.0.1"
+CML2
+default via 192.168.1.1 dev ens192 proto dhcp metric 100
+192.168.0.0/24 dev ens160 proto kernel scope link src 192.168.0.29
+route -n
+ip route show
+
+/etc/sysconfig/network-scripts/route-ens160 
+ex:
+  ADD 10.0.2.0/32 via 192.168.43.1
+      10.0.2.15  via 192.168.43.1
+sudo systemctl restart NetworkManager
+
+-----------------------PERMANENTLY ADDING A STATIC ROUTE---------
+sudo vim /etc/network/interfaces
+ip route add -net 10.0.2.0 netmask 255.255.255.0 gw 192.168.43.1 dev enp0s3
+sudo ifdown enp0s3 && sudo ifup enp0s3
+---------------------------------------------------------------------
+TO DELETE ROUTE:
+sudo ip route del 10.0.2.0/24 via 192.168.43.223 dev enp0s3
+sudo ip route del 10.0.2.15 via 192.168.43.223 dev enp0s3
+sudo ip route del default
+
+TO ADD A DEFAULT ROUTE:
+sudo ip route add default via 192.168.43.1 dev eth0
+
+INTERFACE CONFIGURATION:
+sudo ifconfig -a eth0 add 192.16.200.2 netmask 255.255.255.252 broadcast 255.255.255.255 dstaddr 148.120.2.2
+
+###########################################################
+
+
+
+
+
+router eigrp DMVPN
+ !
+ address-family ipv4 unicast autonomous-system 100
+  !
+  af-interface Tunnel100
+   authentication mode hmac-sha-256 7 04C494
+
+  exit-af-interface
+  !
+  topology base
+  no auto-summary
+  exit-af-topology
+  network 10.0.0.0
+ exit-address-family
+
+
+172.16.5.0/24 BOA      tunnel 1     1.1.1.0/24    VRF BOA
+
+172.16.8.0/24 WACHOVIA  TUNNEL4    4.4.4.0/24 VRF WACHOVIA
+
+172.16.6.0/24 PRINTERS    tunnel2   2.2.2.0/24    VRF PRINTERS
+
+172.16.7.0/24 PHONES   TUNNEL3    3.3.3.0/24 VRF PHONES
+
+crypto key generate rsa mod 2048
+ip ssh version 2
+!
+ip mtu 1400
+ip tcp adjust-mss 1360
+
+
+
+
+
+MAIN HUB: ssh -l cisco 10.0.0.1
+CE-B (CONNECTED TO HUB): ssh -l cisco 5.5.5.5
+
+ISP-PE ( STUB ISP NODE ): ssh -l cisco 16.16.16.16
+ISP (CONNECTED TO STUB ISP NODE): ssh -l cisco 17.17.17.17
+
+BAC CORE (SPOKE1): ssh -l cisco 10.0.0.2
+CUSTA (SPOKE2): ssh -l cisco 10.0.0.3
+
+BAC CORE SWITCH: ssh -l cisco 170.0.0.2
+
+CUST CORE SWITH: ssh -l cisco 170.0.0.10
+
+https://192.168.0.13/ui/#/login
+192.168.0.18 - CML
+
+
+
+DEVNET:
+
+1. Docker Desktop
+   docker pull sapk/cloud9
+   docker images
+   docker run -p 5000:5000 -p 8181:8181 -p 5001:5001 sapk/cloud9 --auth cisco:cisco
+
+
+   docker ps
+   docker ps -a
+   docker start contain_id
+   docker kill contain_id
+
+   localhost:8181
+
+2.  Go cloud9 ubuntu IDE and install && update python
+3.  Download Postman for windows
+
+
+Best tools:
+Ansible
+pyATS
+virutils
+
+
+
+POSTMAN:
+https://{{AS.100}}/restconf/
+https://{{AS.100}}/restconf/data/netconf-state/capabilities
+https://{{AS.100}}/restconf/data/Cisco-IOS-XE-native:native/
+https://{{AS.100}}/restconf/data/Cisco-IOS-XE-native:native/router/
+https://{{AS.100}}/restconf/data/Cisco-IOS-XE-native:native/router-ospf
+https://{{AS.100}}/restconf/data/Cisco-IOS-XE-native:native/interface/
+https://{{AS.100}}/restconf/data/ietf-interfaces:interfaces
+https://{{AS.100}}/restconf/data/Cisco-IOS-XE-interfaces-oper:interfaces
+https://{{AS.100}}/restconf/data/isco-IOS-XE-interfaces-oper:interfaces/interface=Loopback0
+https://{{AS.100}}/restconf/data/
+https://{{AS.100}}/restconf/data/
+https://{{AS.100}}s/restconf/data/
+   
+Router config:
+conf t
+username admin priv 15 secret Cisco!23
+ip http secure-server
+ip http authentication local
+restconf
+int gig 1
+ip add 192.168.1.56 255.255.255.0
+no shut
+router ospf 1
+network 0.0.0.0 255.255.255.255 area 0
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
+router eigrp 1
+net 0.0.0.0
+end
+debug ip http ssl error 
+
+
+
+
+
+{
+    "ietf-interfaces:interfaces": {
+         "name": "Loopback0",
+         "description": "MGMT",
+         "type": "iana-if-type:softwareLoopback",
+         "enabled": true,
+         "ietf-ip:ipv4": {
+            "address": [
+              {
+                "ip": "1.1.1.1",
+                "netmask": "255.255.255.255"
+              }
+            ]
+         }
+     }        
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              

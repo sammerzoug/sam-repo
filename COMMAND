@@ -1,0 +1,13 @@
+////CHECKS DNS STATUS//////////
+systemd-resolve --status
+////////////////////////RENEW DHCP LEASE///
+sudo dhclient -r
+///////////STEPS TO CONFIGURE PYTHON//////////
+https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tar.xz
+sudo apt install build-essential
+sudo ./configure
+make
+sudo make install
+
+/////////////////////ECHO AND APPEND A FILE\\\\\\\\\\\\
+echo "some_text" | sudo tee -a ./somefile.txt

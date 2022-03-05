@@ -1,0 +1,5 @@
+config t
+interface g1
+ip address 172.172.50.3 255.255.255.0
+no shut
+ip route 0.0.0.0 0.0.0.0 172.172.50.1 name GW

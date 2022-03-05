@@ -9,7 +9,14 @@ git init
 git remote add origin https://github.com/<yourLogin>/<yourRepository>.git
 git add .
 git commit -m "Initial commit"
+#push files from local to remote repository
+git push https://github.com/sammerzoug/sam-repo.git
 git push -u origin master
 
-######de-initialize a repository
+#  Will pull file from repository
+git pull https://github.com/sammerzoug/sam-repo.git
+
+#  de-initialize a repository
 rm -rf .git
+
+git config --global user.name "YOUR NAME"

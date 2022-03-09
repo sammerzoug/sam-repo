@@ -2,22 +2,12 @@ import re
 import json
 
 import find_pattern_within_file
+import create_file
 
 #  'f' variable is to create an empty file called 'TEXT.txt'
 f = open('TEXT.txt', 'w+')
-
-while True:
-    #  'g' variable is to open and append to the file called 'TEXT.txt'
-    #  'x' is to collect user input
-    g = open('TEXT.txt', 'a')
-    x = input('Enter \"q\" to quit or "c" to continue: ')
-    if x == 'q':
-        g.close()
-        break
-    else:
-        #  g.write('\n')
-        g.write(input('Search "IOS" start-up configuration: '))
-        g.write('\n')
+#  'create_file module' has method 'file_creation' to write text within 'f'
+create_file.file_creation()
 
 #  'searched_pattern' is used to store a regex argument
 #  searched_pattern = r'\s{0,}ip\s{1,}address'

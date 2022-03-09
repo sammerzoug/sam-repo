@@ -13,9 +13,10 @@ def search_text(searched_pattern, text_file):
     print(list1)
 
     #  This 'for' loop is used to go through each lines of text to search for the pattern
-    for line in list1:
+    i = 0
+    for i, line in enumerate(list1, i):
         matches = re.finditer(searched_pattern, line)
         #   Within for every match, a 'for' loop is required to list each iteration
         for m in matches:
-            print('%02d-%02d: %s' % (m.start(), m.end(), m.group(0)))
+            print('Line %s: %02d-%02d: %s' % (i, m.start(), m.end(), m.group(0)))
 

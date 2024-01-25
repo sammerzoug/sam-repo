@@ -232,7 +232,7 @@ lbl.place(relx=0.5, rely=0.5, anchor=CENTER)
 # -----------------------------------ROOT-----------------------------------------------------
 
 # Create an object of tkinter ImageTk
-img = ImageTk.PhotoImage(Image.open("cisco-modeling-labs-enterprise-lp-banner_1.png"))
+img = ImageTk.PhotoImage(Image.open("banner_1.png"))
 
 # Create a Label Widget to display the text or Image
 label = Label(root, image=img)

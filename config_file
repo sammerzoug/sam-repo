@@ -1,0 +1,2 @@
+interface GigabitEthernet1
+ description ////CONNECT-TO-G0/0.CORE_172.20.1.1////

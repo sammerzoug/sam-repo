@@ -51,7 +51,7 @@ class popupWindow(object):
         label.photo = photo
 
         label.place(
-            relx=0.075,
+            relx=0.04,
             rely=0.2
         )
 
